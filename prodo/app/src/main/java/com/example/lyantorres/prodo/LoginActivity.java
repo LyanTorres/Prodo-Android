@@ -43,6 +43,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
     // ============= FORGOT PASSWORD INTERFACE METHODS =============
     @Override
     public void sendEmailWasPressed() {
-
+        getSupportFragmentManager().popBackStackImmediate();
     }
 }

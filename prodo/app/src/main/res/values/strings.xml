@@ -5,7 +5,11 @@
     <string name="no_stores">Looks like you don\'t have any stores yet.\nPress the \"+\" button up top in order to create a store!</string>
     <string name="no_devices">Looks like you don\'t have any Prodo Devices yet.\nPress the \"+\" button up top in order to connect a Prodo Device!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_email">Please, type in your email and try again.</string>
+    <string name="no_password">Please, type in your password and try again.</string>
+    <string name="no_confirm_password">Please confirm your password and try again.</string>
+    <string name="passwords_do_not_match">Passwords do not match. Please, try again.</string>
+    <string name="no_valid_password">Password must be at least 6 characters long.</string>
+    <string name="no_valid_email">This email is not valid. Please, try again.</string>
 
 </resources>

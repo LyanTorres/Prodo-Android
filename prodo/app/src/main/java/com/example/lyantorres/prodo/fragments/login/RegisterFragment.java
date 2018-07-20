@@ -8,9 +8,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.lyantorres.prodo.dataModels.User;
 import com.example.lyantorres.prodo.R;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterFragment extends Fragment {
 
@@ -60,6 +65,87 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if(getActivity() != null){
+
+            Button registerBTN = (Button) getActivity().findViewById(R.id.register_REGISTER_BTN);
+
+            registerBTN.setOnClickListener(registerWasPressed);
+        }
+
+    }
+
+    private Button.OnClickListener registerWasPressed = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            EditText emailET = (EditText) getActivity().findViewById(R.id.email_REGISTER_ET);
+            EditText passwordET = (EditText) getActivity().findViewById(R.id.password_REGISTER_ET);
+            EditText passwordConfirmET = (EditText) getActivity().findViewById(R.id.confirmPassword_REGISTER_ET);
+
+            String email = emailET.getText().toString();
+            String password = passwordET.getText().toString();
+            String passwordConfirm = passwordConfirmET.getText().toString();
+
+            if(!email.isEmpty() && !password.isEmpty() && !passwordConfirm.isEmpty()) {
+                if(isValidEmail(email)){
+
+                    if(isValidPassword(password)) {
+
+                        if(password.equals(passwordConfirm)) {
+                            // TODO: register new user in database
+                            // this means everything they inputted is valid information
+                        } else {
+                            passwordET.setError(getString(R.string.passwords_do_not_match));
+                        }
+
+                    } else {
+                        passwordET.setError(getString(R.string.no_valid_password));
+                    }
+
+                } else {
+                    emailET.setError(getString(R.string.no_valid_email));
+                }
+                
+            } else {
+                validateInputs();
+            }
+        }
+    };
+
+    private Boolean isValidEmail(String _email){
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(_email);
+        return matcher.matches();
+    }
+
+    private Boolean isValidPassword(String _password){
+        if(_password.length() < 6) {
+            return false;
+        }
+        return true;
+    }
+
+    private void validateInputs(){
+        EditText emailET = (EditText) getActivity().findViewById(R.id.email_REGISTER_ET);
+        EditText passwordET = (EditText) getActivity().findViewById(R.id.password_REGISTER_ET);
+        EditText passwordConfirmET = (EditText) getActivity().findViewById(R.id.confirmPassword_REGISTER_ET);
+
+        String email = emailET.getText().toString();
+        String password = passwordET.getText().toString();
+        String passwordConfirm = passwordConfirmET.getText().toString();
+
+        if(email.isEmpty()){
+            emailET.setError(getString(R.string.no_email));
+        }
+
+        if(password.isEmpty()){
+            passwordET.setError(getString(R.string.no_password));
+        }
+
+        if(passwordConfirm.isEmpty()){
+            passwordConfirmET.setError(getString(R.string.no_confirm_password));
+        }
     }
 
 
