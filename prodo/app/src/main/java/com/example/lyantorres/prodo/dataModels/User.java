@@ -16,7 +16,11 @@ public class User {
     private ArrayList<String> mStores;
     private String mPrefUserKey = "currentUser";
 
-    public User(String _id, String _email, String _token, ArrayList<String> _stores){
+    public User(){
+
+    }
+
+    public void updateUser(String _id, String _email, String _token, ArrayList<String> _stores){
         this._id = _id;
         mEmail = _email;
         mToken = _token;

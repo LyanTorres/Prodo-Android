@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.lyantorres.prodo.commsWithServer.PostDataAsyncTask;
-import com.example.lyantorres.prodo.dataModels.User;
 import com.example.lyantorres.prodo.R;
 import com.example.lyantorres.prodo.commsWithServer.FetchDataAsyncTask;
 import com.example.lyantorres.prodo.helpers.ConnectionUtility;
@@ -42,7 +41,7 @@ public class LoginFragment extends Fragment implements FetchDataAsyncTask.AsyncT
 
 
     public interface LoginFragmentInterface {
-        void loginWasPressed(User _user);
+        void loginWasPressed();
         void registerWasPressed();
         void forgotPasswordWasPressed();
     }
@@ -90,8 +89,13 @@ public class LoginFragment extends Fragment implements FetchDataAsyncTask.AsyncT
 
                     if(!email.isEmpty() && !password.isEmpty()) {
                         String[] body = new String[] {"/users/login", "email:"+email+",password:"+password+""};
+
+                        // TODO: ========= actually login ==========
                         new PostDataAsyncTask().execute(body);
 
+                        if(mInterface != null){
+                            mInterface.loginWasPressed();
+                        }
                     } else {
                         if(email.isEmpty()){
                             emailET.setError(getString(R.string.no_email));
@@ -129,6 +133,6 @@ public class LoginFragment extends Fragment implements FetchDataAsyncTask.AsyncT
 
     @Override
     public void dataWasFetched(String _results) {
-
+        // TODO: ========== user results to create user object and save it ==========
     }
 }

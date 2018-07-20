@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class StoresActivity extends AppCompatActivity {
 
-    SharedPreferences mPreferences = getPreferences(MODE_PRIVATE);
     private User mUser;
     private ArrayList<Store> mStores;
 

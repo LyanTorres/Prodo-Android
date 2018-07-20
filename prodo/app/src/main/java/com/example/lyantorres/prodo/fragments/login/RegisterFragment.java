@@ -27,7 +27,7 @@ public class RegisterFragment extends Fragment {
     }
 
     public interface RegisterFragmentInterface {
-        void registerWasPressed(User _user);
+        void userHasRegistered();
     }
 
     @Override
@@ -78,39 +78,52 @@ public class RegisterFragment extends Fragment {
         @Override
         public void onClick(View v) {
 
-            EditText emailET = (EditText) getActivity().findViewById(R.id.email_REGISTER_ET);
-            EditText passwordET = (EditText) getActivity().findViewById(R.id.password_REGISTER_ET);
-            EditText passwordConfirmET = (EditText) getActivity().findViewById(R.id.confirmPassword_REGISTER_ET);
+            if(inputIsValid()){
 
-            String email = emailET.getText().toString();
-            String password = passwordET.getText().toString();
-            String passwordConfirm = passwordConfirmET.getText().toString();
+                // TODO: ========== post new user to server ==========
+                // TODO: ========== save new user to prefs ==========
 
-            if(!email.isEmpty() && !password.isEmpty() && !passwordConfirm.isEmpty()) {
-                if(isValidEmail(email)){
-
-                    if(isValidPassword(password)) {
-
-                        if(password.equals(passwordConfirm)) {
-                            // TODO: register new user in database
-                            // this means everything they inputted is valid information
-                        } else {
-                            passwordET.setError(getString(R.string.passwords_do_not_match));
-                        }
-
-                    } else {
-                        passwordET.setError(getString(R.string.no_valid_password));
-                    }
-
-                } else {
-                    emailET.setError(getString(R.string.no_valid_email));
+                if(mInterface != null){
+                    mInterface.userHasRegistered();
                 }
-
-            } else {
-                validateInputs();
             }
         }
     };
+
+    private Boolean inputIsValid() {
+        EditText emailET = (EditText) getActivity().findViewById(R.id.email_REGISTER_ET);
+        EditText passwordET = (EditText) getActivity().findViewById(R.id.password_REGISTER_ET);
+        EditText passwordConfirmET = (EditText) getActivity().findViewById(R.id.confirmPassword_REGISTER_ET);
+
+        String email = emailET.getText().toString();
+        String password = passwordET.getText().toString();
+        String passwordConfirm = passwordConfirmET.getText().toString();
+
+        if(!email.isEmpty() && !password.isEmpty() && !passwordConfirm.isEmpty()) {
+            if(isValidEmail(email)){
+
+                if(isValidPassword(password)) {
+
+                    if(password.equals(passwordConfirm)) {
+                        return true;
+
+                    } else {
+                        passwordET.setError(getString(R.string.passwords_do_not_match));
+                    }
+
+                } else {
+                    passwordET.setError(getString(R.string.no_valid_password));
+                }
+
+            } else {
+                emailET.setError(getString(R.string.no_valid_email));
+            }
+
+        } else {
+            validateInputs();
+        }
+        return false;
+    }
 
     private Boolean isValidEmail(String _email){
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";

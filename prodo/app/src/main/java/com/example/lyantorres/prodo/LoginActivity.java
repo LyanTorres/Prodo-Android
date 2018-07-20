@@ -1,5 +1,6 @@
 package com.example.lyantorres.prodo;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,20 +12,30 @@ import com.example.lyantorres.prodo.fragments.login.RegisterFragment;
 
 public class LoginActivity extends AppCompatActivity implements LoginFragment.LoginFragmentInterface, RegisterFragment.RegisterFragmentInterface, ForgotPasswordFragment.ForgotPasswordFragmentInterface{
 
-    SharedPreferences mPreferences = getPreferences(MODE_PRIVATE);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.login_frame, LoginFragment.newInstance(this)).commit();
+
+        User currentUser = new User().getCurrentUser(this);
+
+        if(currentUser != null){
+            startStoresActivity();
+        }
+    }
+
+    private void startStoresActivity(){
+        Intent intent = new Intent(this, StoresActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // ============= LOGIN INTERFACE METHODS =============
     @Override
-    public void loginWasPressed(User _user) {
-
+    public void loginWasPressed() {
+        startStoresActivity();
     }
 
     @Override
@@ -39,8 +50,8 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
 
     // ============= REGISTER INTERFACE METHODS =============
     @Override
-    public void registerWasPressed(User _user) {
-
+    public void userHasRegistered() {
+        startStoresActivity();
     }
 
     // ============= FORGOT PASSWORD INTERFACE METHODS =============
