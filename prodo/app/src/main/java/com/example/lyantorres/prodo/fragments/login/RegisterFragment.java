@@ -105,7 +105,7 @@ public class RegisterFragment extends Fragment {
                 } else {
                     emailET.setError(getString(R.string.no_valid_email));
                 }
-                
+
             } else {
                 validateInputs();
             }
