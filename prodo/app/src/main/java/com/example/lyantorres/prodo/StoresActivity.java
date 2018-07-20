@@ -1,5 +1,6 @@
 package com.example.lyantorres.prodo;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 
 public class StoresActivity extends AppCompatActivity {
 
+    SharedPreferences mPreferences = getPreferences(MODE_PRIVATE);
     private User mUser;
     private ArrayList<Store> mStores;
 

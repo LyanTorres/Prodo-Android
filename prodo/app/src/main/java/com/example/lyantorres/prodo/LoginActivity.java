@@ -1,5 +1,6 @@
 package com.example.lyantorres.prodo;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -9,6 +10,8 @@ import com.example.lyantorres.prodo.fragments.login.LoginFragment;
 import com.example.lyantorres.prodo.fragments.login.RegisterFragment;
 
 public class LoginActivity extends AppCompatActivity implements LoginFragment.LoginFragmentInterface, RegisterFragment.RegisterFragmentInterface, ForgotPasswordFragment.ForgotPasswordFragmentInterface{
+
+    SharedPreferences mPreferences = getPreferences(MODE_PRIVATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
