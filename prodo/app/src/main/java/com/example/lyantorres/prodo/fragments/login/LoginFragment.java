@@ -88,14 +88,14 @@ public class LoginFragment extends Fragment implements FetchDataAsyncTask.AsyncT
                 if(mConnectionUtility.isNetworkAvailable(mContext)){
 
                     if(!email.isEmpty() && !password.isEmpty()) {
-                        String[] body = new String[] {"/users/login", "email:"+email+",password:"+password+""};
+                        String[] body = new String[] {"/users/login", "{\"email\": \""+email+"\",\"password\":\""+password+"\"}"};
 
                         // TODO: ========= actually login ==========
                         new PostDataAsyncTask().execute(body);
 
-                        if(mInterface != null){
-                            mInterface.loginWasPressed();
-                        }
+//                        if(mInterface != null){
+//                            mInterface.loginWasPressed();
+//                        }
                     } else {
                         if(email.isEmpty()){
                             emailET.setError(getString(R.string.no_email));

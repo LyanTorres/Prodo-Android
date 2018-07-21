@@ -81,8 +81,6 @@ public class ForgotPasswordFragment extends Fragment {
 
                 if(isValidEmail(email)) {
                     // TODO: send data to server so that password can be reset
-
-
                     new FeedbackUtility().showToastWith(mContext, "An email to change your password has been sent", Toast.LENGTH_LONG);
 
                     if (mInterface != null) {
