@@ -115,7 +115,6 @@ public class StoresListViewFragment extends ListFragment{
                         if(!name.isEmpty() && !storeId.isEmpty()){
 
                             // TODO: ===== Save it to the server =====
-
                             alertDialog.dismiss();
                         }
 

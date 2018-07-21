@@ -16,6 +16,9 @@ import android.widget.Toast;
 import com.example.lyantorres.prodo.R;
 import com.example.lyantorres.prodo.helpers.FeedbackUtility;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ForgotPasswordFragment extends Fragment {
 
     private static Context mContext;
@@ -76,15 +79,26 @@ public class ForgotPasswordFragment extends Fragment {
                 emailET.setError(getString(R.string.no_email));
             } else {
 
-                // TODO: send data to server so that password can be reset
+                if(isValidEmail(email)) {
+                    // TODO: send data to server so that password can be reset
 
 
-                new FeedbackUtility().showToastWith(mContext, "An email to change your password has been sent", Toast.LENGTH_LONG);
+                    new FeedbackUtility().showToastWith(mContext, "An email to change your password has been sent", Toast.LENGTH_LONG);
 
-                if(mInterface != null){
-                    mInterface.sendEmailWasPressed();
+                    if (mInterface != null) {
+                        mInterface.sendEmailWasPressed();
+                    }
+                } else {
+                    emailET.setError(getString(R.string.no_valid_email));
                 }
             }
         }
     };
+
+    private Boolean isValidEmail(String _email){
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(_email);
+        return matcher.matches();
+    }
 }
