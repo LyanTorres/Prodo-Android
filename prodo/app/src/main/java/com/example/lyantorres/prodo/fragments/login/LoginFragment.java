@@ -13,13 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.lyantorres.prodo.commsWithServer.PostDataAsyncTask;
 import com.example.lyantorres.prodo.R;
-import com.example.lyantorres.prodo.commsWithServer.FetchDataAsyncTask;
 import com.example.lyantorres.prodo.helpers.ConnectionUtility;
 import com.example.lyantorres.prodo.helpers.FeedbackUtility;
 
-public class LoginFragment extends Fragment implements FetchDataAsyncTask.AsyncTaskInterface{
+public class LoginFragment extends Fragment{
 
 
     private static Context mContext;
@@ -41,7 +39,7 @@ public class LoginFragment extends Fragment implements FetchDataAsyncTask.AsyncT
 
 
     public interface LoginFragmentInterface {
-        void loginWasPressed();
+        void loginWasPressed(String[] _body);
         void registerWasPressed();
         void forgotPasswordWasPressed();
     }
@@ -90,12 +88,10 @@ public class LoginFragment extends Fragment implements FetchDataAsyncTask.AsyncT
                     if(!email.isEmpty() && !password.isEmpty()) {
                         String[] body = new String[] {"/users/login", "{\"email\": \""+email+"\",\"password\":\""+password+"\"}"};
 
-                        // TODO: ========= actually login ==========
-                        new PostDataAsyncTask().execute(body);
+                        if(mInterface != null){
+                            mInterface.loginWasPressed(body);
+                        }
 
-//                        if(mInterface != null){
-//                            mInterface.loginWasPressed();
-//                        }
                     } else {
                         if(email.isEmpty()){
                             emailET.setError(getString(R.string.no_email));
@@ -131,8 +127,4 @@ public class LoginFragment extends Fragment implements FetchDataAsyncTask.AsyncT
         }
     };
 
-    @Override
-    public void dataWasFetched(String _results) {
-        // TODO: ========== user results to create user object and save it ==========
-    }
 }

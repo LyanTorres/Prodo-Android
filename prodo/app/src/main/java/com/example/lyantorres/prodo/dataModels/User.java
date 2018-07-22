@@ -3,8 +3,14 @@ package com.example.lyantorres.prodo.dataModels;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -20,11 +26,29 @@ public class User {
 
     }
 
-    public void updateUser(String _id, String _email, String _token, ArrayList<String> _stores){
-        this._id = _id;
-        mEmail = _email;
-        mToken = _token;
-        mStores = _stores;
+    public void updateUser(String _json, Activity _activity){
+
+        try {
+            JSONObject jsonObj = new JSONObject(_json);
+            Log.i("===== PRODO =====", " ========== \n updateUser: USER: "+jsonObj+" \n ==========");
+
+            _id = jsonObj.getString("_id");
+            mEmail = jsonObj.getString("email");
+            mToken = jsonObj.getString("token");
+
+            JSONArray stores = jsonObj.getJSONArray("stores");
+            for(int i = 0; i < stores.length(); i ++){
+                mStores.add(stores.getString(i));
+            }
+
+            this.saveCurrentUser(_activity);
+            Log.i("===== PRODO =====", " ========== \n updateUser: USER: "+this.getmToken()+" \n ==========");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i("===== PRODO =====", " ========== \n updateUser: SOMETHING WENT WRONG WHEN PARSING USER JOSN \n ==========");
+        }
+
     }
 
     public void saveCurrentUser(Activity _activity){

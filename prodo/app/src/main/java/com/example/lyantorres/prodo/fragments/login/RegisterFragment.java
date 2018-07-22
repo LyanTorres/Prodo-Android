@@ -27,7 +27,7 @@ public class RegisterFragment extends Fragment {
     }
 
     public interface RegisterFragmentInterface {
-        void userHasRegistered();
+        void userHasRegistered(String[] _body);
     }
 
     @Override
@@ -80,11 +80,15 @@ public class RegisterFragment extends Fragment {
 
             if(inputIsValid()){
 
-                // TODO: ========== post new user to server ==========
-                // TODO: ========== save new user to prefs ==========
+                EditText emailET = (EditText) getActivity().findViewById(R.id.email_REGISTER_ET);
+                EditText passwordET = (EditText) getActivity().findViewById(R.id.password_REGISTER_ET);
+                String email = emailET.getText().toString();
+                String password = passwordET.getText().toString();
+
+                String[] body = new String[] {"/users", "{\"email\":\""+email+"\",\"password\":\""+password+"\"}", "token"};
 
                 if(mInterface != null){
-                    mInterface.userHasRegistered();
+                    mInterface.userHasRegistered(body);
                 }
             }
         }

@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -19,20 +21,22 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String>  {
     private static Context mContext;
     private static PostDataAsyncTaskInterface mInterface;
 
-    public static FetchDataAsyncTask newInstance(Context _context) {
+    public static PostDataAsyncTask newInstance(Context _context) {
 
         mContext = _context;
 
         if(_context instanceof PostDataAsyncTaskInterface){
             mInterface = (PostDataAsyncTaskInterface) _context;
         }
+
         Bundle args = new Bundle();
-        FetchDataAsyncTask fragment = new FetchDataAsyncTask();
+        PostDataAsyncTask fragment = new PostDataAsyncTask();
         return fragment;
     }
 
     public interface PostDataAsyncTaskInterface{
         void dataPosted(String _results);
+        void dataWasNotPosted();
     }
     @Override
     protected String doInBackground(String... strings) {
@@ -68,6 +72,16 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String>  {
                 result.append(dataString);
             }
 
+            if(3 == strings.length){
+                String token = mUrlConnection.getHeaderField("X-Auth");
+                JSONObject jsonResults = new JSONObject(result.toString());
+
+                jsonResults.put("token", token);
+
+                result = new StringBuilder(jsonResults.toString());
+                Log.i("===== PRODO =====", "========== \n doInBackground: results: " + result +" \n ==========");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -83,8 +97,15 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String>  {
     @Override
     protected void onPostExecute(String _results) {
         super.onPostExecute(_results);
-        if(mInterface != null){
-            mInterface.dataPosted(_results);
+
+        if(_results == null){
+            if(mInterface != null){
+                mInterface.dataWasNotPosted();
+            }
+        } else {
+            if (mInterface != null) {
+                mInterface.dataPosted(_results);
+            }
         }
     }
 }

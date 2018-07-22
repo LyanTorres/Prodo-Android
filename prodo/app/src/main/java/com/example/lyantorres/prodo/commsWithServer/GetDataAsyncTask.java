@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class FetchDataAsyncTask extends AsyncTask<String, String, String> {
+public class GetDataAsyncTask extends AsyncTask<String, String, String> {
 
     private HttpURLConnection mUrlConnection;
     private static Context mContext;
@@ -18,9 +18,10 @@ public class FetchDataAsyncTask extends AsyncTask<String, String, String> {
 
     public interface AsyncTaskInterface {
         void dataWasFetched(String _results);
+        void dataWasNotFetched();
     }
 
-    public static FetchDataAsyncTask newInstance(Context _context) {
+    public static GetDataAsyncTask newInstance(Context _context) {
 
         mContext = _context;
 
@@ -28,7 +29,7 @@ public class FetchDataAsyncTask extends AsyncTask<String, String, String> {
             mInterface = (AsyncTaskInterface) _context;
         }
         Bundle args = new Bundle();
-        FetchDataAsyncTask fragment = new FetchDataAsyncTask();
+        GetDataAsyncTask fragment = new GetDataAsyncTask();
         return fragment;
     }
 
@@ -61,6 +62,7 @@ public class FetchDataAsyncTask extends AsyncTask<String, String, String> {
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.i("===== PRODO =====", "========== \n doInBackground: results: " + result +" \n ==========");
             return null;
 
         } finally {
@@ -74,8 +76,15 @@ public class FetchDataAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String _results) {
         super.onPostExecute(_results);
-        if(mInterface != null){
-            mInterface.dataWasFetched(_results);
+
+        if(_results == null){
+            if(mInterface != null){
+                mInterface.dataWasNotFetched();
+            }
+        } else {
+            if (mInterface != null) {
+                mInterface.dataWasFetched(_results);
+            }
         }
     }
 }

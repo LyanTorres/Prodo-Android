@@ -38,7 +38,7 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     public interface ForgotPasswordFragmentInterface {
-        void sendEmailWasPressed();
+        void sendEmailWasPressed(String[] _body);
     }
 
     @Override
@@ -80,11 +80,10 @@ public class ForgotPasswordFragment extends Fragment {
             } else {
 
                 if(isValidEmail(email)) {
-                    // TODO: send data to server so that password can be reset
-                    new FeedbackUtility().showToastWith(mContext, "An email to change your password has been sent", Toast.LENGTH_LONG);
 
+                    String[] body = new String[] {"/forgot", "{\"email\": \""+email+"\"}"};
                     if (mInterface != null) {
-                        mInterface.sendEmailWasPressed();
+                        mInterface.sendEmailWasPressed(body);
                     }
                 } else {
                     emailET.setError(getString(R.string.no_valid_email));
