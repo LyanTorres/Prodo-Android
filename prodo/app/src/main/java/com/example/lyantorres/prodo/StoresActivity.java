@@ -33,6 +33,9 @@ public class StoresActivity extends AppCompatActivity implements StoresListViewF
         }
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, StoresListViewFragment.newInstance(this)).commit();
+
+        String[] body = new String[] {"/stores"};
+        getStores(body);
     }
 
     private void getStores(String[] _body){
@@ -71,7 +74,7 @@ public class StoresActivity extends AppCompatActivity implements StoresListViewF
     @Override
     public void dataWasNotPosted() {
         mProgressDialog.dismiss();
-        String[] body = new String[] {"/stores", "{}"};
+        String[] body = new String[] {"/stores"};
         getStores(body);
     }
 
@@ -79,12 +82,12 @@ public class StoresActivity extends AppCompatActivity implements StoresListViewF
     @Override
     public void dataWasFetched(String _results) {
         mProgressDialog.dismiss();
-        Log.i("PRODO", "dataWasFetched: "+_results+"");
+        Log.i("===== PRODO =====", "========== \n dataWasFetched: "+_results+" \n ==========");
     }
 
     @Override
     public void dataWasNotFetched() {
         mProgressDialog.dismiss();
-
+        Log.i("===== PRODO =====", "========== \n dataWasNOTFetched \n ==========");
     }
 }
