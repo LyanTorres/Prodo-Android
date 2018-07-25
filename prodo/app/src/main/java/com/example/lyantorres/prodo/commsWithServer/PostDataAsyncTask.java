@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.lyantorres.prodo.dataModels.User;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -20,11 +22,12 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String>  {
     private HttpsURLConnection mUrlConnection;
     private static Context mContext;
     private static PostDataAsyncTaskInterface mInterface;
+    private static User mUser;
 
-    public static PostDataAsyncTask newInstance(Context _context) {
+    public static PostDataAsyncTask newInstance(Context _context, User _user) {
 
         mContext = _context;
-
+        mUser = _user;
         if(_context instanceof PostDataAsyncTaskInterface){
             mInterface = (PostDataAsyncTaskInterface) _context;
         }
@@ -51,6 +54,10 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String>  {
             mUrlConnection.setDoOutput(true);
             mUrlConnection.setRequestMethod("POST");
             mUrlConnection.setRequestProperty("Content-Type", "application/json");
+
+            if(mUser != null){
+                mUrlConnection.setRequestProperty("X-Auth", mUser.getmToken());
+            }
 
             String body = strings[1];
 

@@ -5,28 +5,33 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.lyantorres.prodo.dataModels.User;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class GetDataAsyncTask extends AsyncTask<String, String, String> {
 
     private HttpURLConnection mUrlConnection;
     private static Context mContext;
-    private static AsyncTaskInterface mInterface;
+    private static GetAsyncTaskInterface mInterface;
+    private static User mUser;
 
-    public interface AsyncTaskInterface {
+    public interface GetAsyncTaskInterface {
         void dataWasFetched(String _results);
         void dataWasNotFetched();
     }
 
-    public static GetDataAsyncTask newInstance(Context _context) {
+    public static GetDataAsyncTask newInstance(Context _context, User _user) {
 
         mContext = _context;
-
-        if(_context instanceof AsyncTaskInterface){
-            mInterface = (AsyncTaskInterface) _context;
+        mUser = _user;
+        if(_context instanceof GetAsyncTaskInterface){
+            mInterface = (GetAsyncTaskInterface) _context;
         }
         Bundle args = new Bundle();
         GetDataAsyncTask fragment = new GetDataAsyncTask();
@@ -42,7 +47,8 @@ public class GetDataAsyncTask extends AsyncTask<String, String, String> {
         try {
             url = new URL(urlRoot+strings[0]);
 
-            mUrlConnection = (HttpURLConnection) url.openConnection();
+            mUrlConnection = (HttpsURLConnection) url.openConnection();
+            mUrlConnection.setRequestProperty("X-Auth", mUser.getmToken());
             mUrlConnection.setRequestMethod("GET");
             mUrlConnection.setRequestProperty("Content-Type", "application/json");
 

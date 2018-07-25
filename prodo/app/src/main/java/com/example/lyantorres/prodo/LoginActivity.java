@@ -1,9 +1,10 @@
 package com.example.lyantorres.prodo;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.lyantorres.prodo.commsWithServer.PostDataAsyncTask;
@@ -20,6 +21,8 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
     String mRegisterAction = "REGISTER";
     String mForgotAction = "FORGOT";
     FeedbackUtility mFeedback = new FeedbackUtility();
+    ProgressDialog mProgressDialog;
+    User mUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,23 +31,33 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
 
         getSupportFragmentManager().beginTransaction().replace(R.id.login_frame, LoginFragment.newInstance(this)).commit();
 
-        User currentUser = new User().getCurrentUser(this);
+        mUser = new User();
+        mUser = mUser.getCurrentUser(this);
 
-        if(currentUser != null){
+        if(mUser != null){
+            Log.i("===== PRODO =====", "onCreate: " + mUser.getmEmail() + "");
             startStoresActivity();
         }
     }
 
     private void startStoresActivity(){
+        mUser = new User();
         Intent intent = new Intent(this, StoresActivity.class);
+        intent.putExtra(mUser.getmPrefUserKey(), mUser.getCurrentUser(this));
         startActivity(intent);
         finish();
+    }
+
+    private void showIndeterminateProgressDialog(String _title, String _message){
+        mProgressDialog =  ProgressDialog.show(this,_title,
+                _message, true);
     }
 
     // ============= LOGIN INTERFACE METHODS =============
     @Override
     public void loginWasPressed(String[] _body) {
-        PostDataAsyncTask task = PostDataAsyncTask.newInstance(this);
+        showIndeterminateProgressDialog( "", "Logging in. Please wait...");
+        PostDataAsyncTask task = PostDataAsyncTask.newInstance(this, null);
         task.execute(_body);
         mAction = mLoginAction;
     }
@@ -62,7 +75,8 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
     // ============= REGISTER INTERFACE METHODS =============
     @Override
     public void userHasRegistered(String[] _body) {
-        PostDataAsyncTask task = PostDataAsyncTask.newInstance(this);
+        showIndeterminateProgressDialog( "", "Creating your new account. Please wait...");
+        PostDataAsyncTask task = PostDataAsyncTask.newInstance(this, null);
         task.execute(_body);
         mAction = mRegisterAction;
     }
@@ -70,21 +84,24 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
     // ============= FORGOT PASSWORD INTERFACE METHODS =============
     @Override
     public void sendEmailWasPressed(String[] _body) {
-        PostDataAsyncTask task = PostDataAsyncTask.newInstance(this);
+        showIndeterminateProgressDialog( "", "Sending reset password email. Please wait...");
+        PostDataAsyncTask task = PostDataAsyncTask.newInstance(this, null);
         task.execute(_body);
         mAction = mForgotAction;
     }
 
+
+    // ============= ASYNC TASK METHODS =============
     @Override
     public void dataPosted(String _results) {
+        mProgressDialog.dismiss();
+        mUser = new User();
 
         if(mAction.equals(mLoginAction)) {
-            User user = new User();
-            user.updateUser(_results, this);
+            mUser.updateUser(_results, this);
             startStoresActivity();
         } else if (mAction == mRegisterAction){
-            User user = new User();
-            user.updateUser(_results, this);
+            mUser.updateUser(_results, this);
             startStoresActivity();
         } else {
             mFeedback.showToastWith(this, "An email to reset your password has been sent.", Toast.LENGTH_SHORT);
@@ -94,6 +111,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
 
     @Override
     public void dataWasNotPosted() {
+        mProgressDialog.dismiss();
 
         if(mAction.equals(mLoginAction)) {
             mFeedback.showToastWith(this, "Something went wrong logging in.", Toast.LENGTH_SHORT);

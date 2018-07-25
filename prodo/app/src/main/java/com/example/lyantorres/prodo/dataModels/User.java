@@ -12,14 +12,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable{
 
     private String _id;
     private String mEmail;
     private String mToken;
-    private ArrayList<String> mStores;
+    private ArrayList<String> mStores = new ArrayList<>();
     private String mPrefUserKey = "currentUser";
 
     public User(){
@@ -65,7 +66,17 @@ public class User {
         Gson gson = new Gson();
         String json = preferences.getString(mPrefUserKey, "");
         User obj = gson.fromJson(json, User.class);
-        return obj;
+
+        if(obj == null) {
+            return null;
+        }
+
+        this.mEmail = obj.mEmail;
+        this.mToken = obj.mToken;
+        this.mStores = obj.mStores;
+        this._id = obj._id;
+
+        return this;
     }
 
     public String get_id() {
@@ -82,5 +93,9 @@ public class User {
 
     public ArrayList<String> getmStores() {
         return mStores;
+    }
+
+    public String getmPrefUserKey() {
+        return mPrefUserKey;
     }
 }

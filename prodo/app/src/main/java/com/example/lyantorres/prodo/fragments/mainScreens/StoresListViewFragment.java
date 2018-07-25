@@ -31,12 +31,14 @@ public class StoresListViewFragment extends ListFragment{
         // Required empty public constructor
     }
 
-    interface StoreListFragmentInterface{
+    public interface StoreListFragmentInterface{
         void storeWasSelected(String _storeId, ArrayList<String> _devices);
+        void storeWasAdded(String[] _body);
     }
 
-    public static StoresListViewFragment newInstance() {
+    public static StoresListViewFragment newInstance(Context _content) {
         StoresListViewFragment fragment = new StoresListViewFragment();
+        mContext = _content;
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -113,8 +115,12 @@ public class StoresListViewFragment extends ListFragment{
                         String storeId = storeIDET.getText().toString();
 
                         if(!name.isEmpty() && !storeId.isEmpty()){
+                            String[] body = new String[] {"/stores", "{\"name\":\""+name+"\",\"storeId\":\""+storeId+"\"}"};
 
-                            // TODO: ===== Save it to the server =====
+                            if(mInterface != null){
+                                mInterface.storeWasAdded(body);
+                            }
+
                             alertDialog.dismiss();
                         }
 

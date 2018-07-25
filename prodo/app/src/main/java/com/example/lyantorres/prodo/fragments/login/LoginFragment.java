@@ -86,7 +86,7 @@ public class LoginFragment extends Fragment{
                 if(mConnectionUtility.isNetworkAvailable(mContext)){
 
                     if(!email.isEmpty() && !password.isEmpty()) {
-                        String[] body = new String[] {"/users/login", "{\"email\": \""+email+"\",\"password\":\""+password+"\"}"};
+                        String[] body = new String[] {"/users/login", "{\"email\": \""+email+"\",\"password\":\""+password+"\"}", "token"};
 
                         if(mInterface != null){
                             mInterface.loginWasPressed(body);
