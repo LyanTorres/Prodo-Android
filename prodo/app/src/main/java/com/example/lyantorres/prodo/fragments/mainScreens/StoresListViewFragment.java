@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
+import com.example.lyantorres.prodo.adapters.StoresAdapter;
 import com.example.lyantorres.prodo.dataModels.Store;
 import com.example.lyantorres.prodo.R;
 
@@ -36,9 +40,10 @@ public class StoresListViewFragment extends ListFragment{
         void storeWasAdded(String[] _body);
     }
 
-    public static StoresListViewFragment newInstance(Context _content) {
+    public static StoresListViewFragment newInstance(Context _context, ArrayList<Store> _stores) {
         StoresListViewFragment fragment = new StoresListViewFragment();
-        mContext = _content;
+        mContext = _context;
+        mStores = _stores;
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -56,7 +61,18 @@ public class StoresListViewFragment extends ListFragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        //TODO: FINISH SETUP FOR DISPLAYING STORES
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(getActivity() != null){
+            StoresAdapter adapter = new StoresAdapter(mContext, mStores);
+            ListView lv = getActivity().findViewById(android.R.id.list);
+            lv.setAdapter(adapter);
+
+        }
     }
 
     @Override

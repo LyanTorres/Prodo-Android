@@ -12,12 +12,15 @@ import com.example.lyantorres.prodo.dataModels.Store;
 import com.example.lyantorres.prodo.dataModels.User;
 import com.example.lyantorres.prodo.fragments.mainScreens.StoresListViewFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class StoresActivity extends AppCompatActivity implements StoresListViewFragment.StoreListFragmentInterface, PostDataAsyncTask.PostDataAsyncTaskInterface, GetDataAsyncTask.GetAsyncTaskInterface {
 
     private User mUser;
-    private ArrayList<Store> mStores;
+    private ArrayList<Store> mStores = new ArrayList<>();
     ProgressDialog mProgressDialog;
 
     @Override
@@ -32,7 +35,7 @@ public class StoresActivity extends AppCompatActivity implements StoresListViewF
             mUser = (User) intent.getSerializableExtra(mUser.getmPrefUserKey());
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, StoresListViewFragment.newInstance(this)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, StoresListViewFragment.newInstance(this, mStores)).commit();
 
         String[] body = new String[] {"/stores"};
         getStores(body);
@@ -82,7 +85,18 @@ public class StoresActivity extends AppCompatActivity implements StoresListViewF
     @Override
     public void dataWasFetched(String _results) {
         mProgressDialog.dismiss();
-        Log.i("===== PRODO =====", "========== \n dataWasFetched: "+_results+" \n ==========");
+        mStores.clear();
+        try {
+            JSONArray storesJSON = new JSONArray(_results);
+            for (int i = 0; i < storesJSON.length() ; i ++){
+                mStores.add(new Store( storesJSON.getJSONObject(i)));
+            }
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, StoresListViewFragment.newInstance(this, mStores)).commit();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

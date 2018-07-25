@@ -1,5 +1,11 @@
 package com.example.lyantorres.prodo.dataModels;
 
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Store {
@@ -7,13 +13,25 @@ public class Store {
     private String _id;
     private String mName;
     private String mStoreId;
-    private ArrayList<String> mDevices;
+    private ArrayList<String> mDevices = new ArrayList<>();
 
-    public Store(String _id, String _name, String _storeId, ArrayList<String> _devices){
-        this._id = _id;
-        mName = _name;
-        mStoreId= _storeId;
-        mDevices = _devices;
+    public Store(JSONObject _storeJSONobj){
+
+        try {
+
+            mStoreId = _storeJSONobj.getString("_id");
+            mName = _storeJSONobj.getString("name");
+            mStoreId = _storeJSONobj.getString("storeId");
+
+            JSONArray devicesJson = _storeJSONobj.getJSONArray("devices");
+
+            for (int i = 0; i < devicesJson.length(); i ++) {
+                //mDevices.add( new Device(devicesJson.get(i)));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String get_id() {
