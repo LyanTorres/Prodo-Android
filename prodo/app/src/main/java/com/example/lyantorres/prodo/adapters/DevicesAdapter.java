@@ -43,16 +43,19 @@ public class DevicesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.store_cell_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.device_grid_item, parent, false);
         }
 
         Device device = mDevices.get(position);
 
         ImageView preview = convertView.findViewById(R.id.devicePreview_DC_IV);
-        TextView name = convertView.findViewById(R.id.storeIdentifier_SC_TV);
+        TextView name = convertView.findViewById(R.id.deviceName_TV);
 
         name.setText(device.getmName());
-        Picasso.with(mContext).load(device.getmCurrentContent().getmThumbnailLink()).into(preview);
+
+        if(device.getmCurrentContent() != null) {
+            Picasso.with(mContext).load(device.getmCurrentContent().getmThumbnailLink()).into(preview);
+        }
 
         return convertView;
     }

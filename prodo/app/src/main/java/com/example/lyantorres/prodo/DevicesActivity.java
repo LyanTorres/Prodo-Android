@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.lyantorres.prodo.commsWithServer.DeleteDataAsyncTask;
 import com.example.lyantorres.prodo.commsWithServer.GetDataAsyncTask;
+import com.example.lyantorres.prodo.commsWithServer.PostDataAsyncTask;
 import com.example.lyantorres.prodo.dataModels.Content;
 import com.example.lyantorres.prodo.dataModels.Device;
 import com.example.lyantorres.prodo.dataModels.User;
@@ -20,11 +23,17 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DevicesActivity extends AppCompatActivity implements GetDataAsyncTask.GetAsyncTaskInterface, DevicesGridFragment.DeviceGridFragmentInterface, DeviceSettingsFragment.DeviceSettingsFragmentInterface {
+public class DevicesActivity extends AppCompatActivity implements GetDataAsyncTask.GetAsyncTaskInterface, DevicesGridFragment.DeviceGridFragmentInterface, DeviceSettingsFragment.DeviceSettingsFragmentInterface,
+        PostDataAsyncTask.PostDataAsyncTaskInterface{
 
     private ArrayList<Device> mDevices = new ArrayList<>();
     private User mUser;
     ProgressDialog mProgressDialog;
+    private String mStoreId;
+    private String mAction = "";
+    private String mAddDevice = "ADD";
+    private String mGetDevices = "DEVICES";
+    private String mDeleteDevice = "DELETE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,25 +42,32 @@ public class DevicesActivity extends AppCompatActivity implements GetDataAsyncTa
 
         Intent intent = getIntent();
         if(intent != null) {
-            String storeId = intent.getStringExtra("STOREID");
+            mStoreId= intent.getStringExtra("STOREID");
             ArrayList<String> devicesString = intent.getStringArrayListExtra("DEVICES");
             mUser = (User) intent.getSerializableExtra("USER");
 
-            showIndeterminateProgressDialog("", "Getting your devices. Please wait...");
-            String[] body = new String[] {"/"+storeId+"/devices", "{}"};
-            GetDataAsyncTask task = GetDataAsyncTask.newInstance(this, mUser);
-            task.execute(body);
+            getDevices();
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.device_frame, DevicesGridFragment.newInstance(this, mDevices)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.device_frame, DevicesGridFragment.newInstance(this, mDevices, mStoreId)).commit();
     }
 
+
+    private void getDevices(){
+        showIndeterminateProgressDialog("", "Getting your devices. Please wait...");
+        String[] body = new String[] {"/"+mStoreId+"/devices", "{}"};
+        GetDataAsyncTask task = GetDataAsyncTask.newInstance(this, mUser);
+        task.execute(body);
+        mAction = mGetDevices;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         //TODO: receive the selected video from gallery
+
+        Log.i("===== PRODO =====", "========== \n onActivityResult: "+data+" \n ========== ");
     }
 
     private void showIndeterminateProgressDialog(String _title, String _message){
@@ -65,11 +81,23 @@ public class DevicesActivity extends AppCompatActivity implements GetDataAsyncTa
         getSupportFragmentManager().beginTransaction().replace(R.id.device_frame, DeviceSettingsFragment.newInstance(this, _device)).addToBackStack("device").commit();
     }
 
+    @Override
+    public void addDevice(String[] _body) {
+        showIndeterminateProgressDialog("","Adding your device. Please wait...");
+        PostDataAsyncTask task = PostDataAsyncTask.newInstance(this,mUser);
+        task.execute(_body);
+        mAction = mAddDevice;
+    }
+
 
     // ============= DEVICE SETTINGS FRAGMENT INTERFACE METHODS =============
     @Override
     public void deleteDevice(String _deviceId) {
-
+        showIndeterminateProgressDialog("","Deleting your device. Please wait...");
+        String[] body = new String[] {"/device/"+_deviceId+"", "{}"};
+        DeleteDataAsyncTask task = DeleteDataAsyncTask.newInstance(this,mUser);
+        task.execute(body);
+        mAction = mDeleteDevice;
     }
 
     @Override
@@ -92,25 +120,50 @@ public class DevicesActivity extends AppCompatActivity implements GetDataAsyncTa
         Log.i("===== PRODO =====", "========== \n dataWasFetched: "+_results+" \n ==========");
         mProgressDialog.dismiss();
 
-        try {
-            JSONArray devices = new JSONArray(_results);
+        if(mAction == mGetDevices) {
 
-            mDevices.clear();
-            for(int i = 0; i < devices.length(); i ++){
-                JSONObject device = devices.getJSONObject(i);
-                mDevices.add(new Device(device));
+            try {
+                JSONArray devices = new JSONArray(_results);
+
+                mDevices.clear();
+                for (int i = 0; i < devices.length(); i++) {
+                    JSONObject device = devices.getJSONObject(i);
+                    mDevices.add(new Device(device));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.device_frame, DevicesGridFragment.newInstance(this, mDevices)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.device_frame, DevicesGridFragment.newInstance(this, mDevices, mStoreId)).commit();
     }
 
     @Override
     public void dataWasNotFetched() {
-
+        mProgressDialog.dismiss();
+        if(mAction == mGetDevices) {
+            Toast.makeText(this,"Something went wrong while getting your devices.", Toast.LENGTH_LONG).show();
+        }
     }
 
+    @Override
+    public void dataPosted(String _results) {
+        mProgressDialog.dismiss();
+        if(mAction == mAddDevice){
+            Toast.makeText(this,"Your device has been added", Toast.LENGTH_SHORT).show();
+        } else if(mAction == mDeleteDevice){
+            Toast.makeText(this,"Your device has been deleted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void dataWasNotPosted() {
+        mProgressDialog.dismiss();
+        if(mAction == mAddDevice){
+            Toast.makeText(this,"Something went wrong while adding your device.", Toast.LENGTH_LONG).show();
+        } else if(mAction == mDeleteDevice){
+            Toast.makeText(this,"Something went wrong while deleting your device.", Toast.LENGTH_LONG).show();
+        }
+    }
 }

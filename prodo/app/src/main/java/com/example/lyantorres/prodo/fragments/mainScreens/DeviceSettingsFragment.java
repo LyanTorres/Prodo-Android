@@ -1,7 +1,9 @@
 package com.example.lyantorres.prodo.fragments.mainScreens;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +19,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lyantorres.prodo.R;
 import com.example.lyantorres.prodo.dataModels.Content;
@@ -103,9 +106,23 @@ public class DeviceSettingsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId() == R.id.device_settings_delete){
-            if(mInterface != null){
-                mInterface.deleteDevice(mDevice.get_id());
-            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Deleting: "+mDevice.getmName()+"");
+            builder.setMessage("Are you sure you want to delete this device? ");
+            builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(mInterface != null){
+                        mInterface.deleteDevice(mDevice.get_id());
+                    }
+                }
+            });
+            builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.create().show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -114,8 +131,13 @@ public class DeviceSettingsFragment extends Fragment {
     Button.OnClickListener switchVideoSelected = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(mInterface != null){
-                mInterface.switchVideoWasSelected(mDevice);
+
+            if(mDevice.getmContent() != null) {
+                if (mInterface != null) {
+                    mInterface.switchVideoWasSelected(mDevice);
+                }
+            } else {
+                Toast.makeText(mContext, "There is no previous uploads to choose from.", Toast.LENGTH_LONG).show();
             }
         }
     };

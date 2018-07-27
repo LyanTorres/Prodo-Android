@@ -9,16 +9,15 @@
     tools:context=".fragments.mainScreens.DevicesGridFragment">
 
 
-    <TextView
-        android:id="@+id/nodevices_DGV_TV"
+    <ImageView
+        android:id="@+id/nodevices_DGV_IV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_devices"
+        android:src="@drawable/no_devices"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/colorLightGray"
         android:textAlignment="center"/>
 
     <GridView
