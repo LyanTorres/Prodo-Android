@@ -2,27 +2,33 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout2"
+    android:id="@+id/frameLayout8"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".fragments.mainScreens.DevicesGridFragment">
+    tools:context=".fragments.mainScreens.ContentGridViewFragment">
 
 
     <TextView
-        android:id="@+id/nodevices_DGV_TV"
+        android:id="@+id/empty_S_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_devices"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="You don't have any previously uploaded videos \n to choose from."
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/content_C_GV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/colorLightGray"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:textColor="@color/colorLightGray"/>
 
     <GridView
-        android:id="@+id/grid_DGV_GV"
+        android:id="@+id/content_C_GV"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,14 +1,14 @@
 package com.example.lyantorres.prodo.dataModels;
 
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Store {
+public class Store implements Serializable{
 
     private String _id;
     private String mName;
@@ -16,23 +16,23 @@ public class Store {
     private ArrayList<String> mDevices = new ArrayList<>();
 
     public Store(JSONObject _storeJSONobj){
-
         try {
 
-            mStoreId = _storeJSONobj.getString("_id");
+            _id = _storeJSONobj.getString("_id");
             mName = _storeJSONobj.getString("name");
             mStoreId = _storeJSONobj.getString("storeId");
 
             JSONArray devicesJson = _storeJSONobj.getJSONArray("devices");
 
             for (int i = 0; i < devicesJson.length(); i ++) {
-                //mDevices.add( new Device(devicesJson.get(i)));
+                mDevices.add( devicesJson.getString(i));
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
 
     public String get_id() {
         return _id;

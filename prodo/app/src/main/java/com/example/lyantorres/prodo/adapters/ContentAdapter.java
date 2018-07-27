@@ -9,30 +9,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lyantorres.prodo.R;
+import com.example.lyantorres.prodo.dataModels.Content;
 import com.example.lyantorres.prodo.dataModels.Device;
-import com.example.lyantorres.prodo.dataModels.Store;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class DevicesAdapter extends BaseAdapter {
+public class ContentAdapter extends BaseAdapter {
 
     private static Context mContext;
-    private static ArrayList<Device> mDevices;
+    private static ArrayList<Content> mContent;
 
-    public DevicesAdapter(Context _context, ArrayList<Device> _devices){
+    public ContentAdapter(Context _context, ArrayList<Content> _content){
+        mContent = _content;
         mContext = _context;
-        mDevices = _devices;
     }
 
     @Override
     public int getCount() {
-        return mDevices.size();
+        return mContent.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mDevices.get(position);
+        return mContent.get(position);
     }
 
     @Override
@@ -46,13 +46,13 @@ public class DevicesAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.store_cell_item, parent, false);
         }
 
-        Device device = mDevices.get(position);
+        Content content = mContent.get(position);
 
-        ImageView preview = convertView.findViewById(R.id.devicePreview_DC_IV);
-        TextView name = convertView.findViewById(R.id.storeIdentifier_SC_TV);
+        ImageView preview = convertView.findViewById(R.id.contentPreview_C_IV);
+        TextView name = convertView.findViewById(R.id.contentName_S_TV);
 
-        name.setText(device.getmName());
-        Picasso.with(mContext).load(device.getmCurrentContent().getmThumbnailLink()).into(preview);
+        name.setText(content.getmName());
+        Picasso.with(mContext).load(content.getmThumbnailLink()).into(preview);
 
         return convertView;
     }

@@ -1,16 +1,38 @@
 package com.example.lyantorres.prodo.dataModels;
 
-public class Device {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Device implements Serializable{
     private String _id;
     private String mName;
-    private String mContentLinks;
-    private String mThumbnailLink;
+    private ArrayList<Content> mContent;
+    private Content mCurrentContent;
 
-    public Device (String _id, String _name, String _contentLinks, String _thumbnailLink){
-        this._id = _id;
-        mName= _name;
-        mContentLinks = _contentLinks;
-        mThumbnailLink = _thumbnailLink;
+    public Device (JSONObject _deviceJSON){
+
+        try {
+            _id = _deviceJSON.getString("_id");
+            mName = _deviceJSON.getString("name");
+            JSONObject jsonObj = _deviceJSON.getJSONObject("currentContent");
+            mCurrentContent = new Content(jsonObj);
+
+            JSONArray contentJSON = _deviceJSON.getJSONArray("content");
+
+            for (int i = 0; i < contentJSON.length(); i ++){
+                JSONObject obj = contentJSON.getJSONObject(i);
+                mContent.add(new Content(obj));
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String get_id() {
@@ -29,19 +51,11 @@ public class Device {
         this.mName = _name;
     }
 
-    public String getmContentLinks() {
-        return mContentLinks;
+    public ArrayList<Content> getmContent() {
+        return mContent;
     }
 
-    public void setmContentLinks(String _contentLinks) {
-        this.mContentLinks = _contentLinks;
-    }
-
-    public String getmThumbnailLink() {
-        return mThumbnailLink;
-    }
-
-    public void setmThumbnailLink(String _thumbnailLink) {
-        this.mThumbnailLink = _thumbnailLink;
+    public Content getmCurrentContent() {
+        return mCurrentContent;
     }
 }

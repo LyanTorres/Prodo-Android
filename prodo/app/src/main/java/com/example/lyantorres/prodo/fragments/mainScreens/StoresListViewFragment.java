@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -36,8 +38,9 @@ public class StoresListViewFragment extends ListFragment{
     }
 
     public interface StoreListFragmentInterface{
-        void storeWasSelected(String _storeId, ArrayList<String> _devices);
+        void storeWasSelected(String _storeId, int _i);
         void storeWasAdded(String[] _body);
+        void profileWasPressed();
     }
 
     public static StoresListViewFragment newInstance(Context _context, ArrayList<Store> _stores) {
@@ -72,6 +75,7 @@ public class StoresListViewFragment extends ListFragment{
             ListView lv = getActivity().findViewById(android.R.id.list);
             lv.setAdapter(adapter);
 
+            lv.setOnItemClickListener(itemWasSelected);
         }
     }
 
@@ -92,6 +96,10 @@ public class StoresListViewFragment extends ListFragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.stores_menu_add) {
             addStoreDialog();
+        } else if (item.getItemId() == R.id.stores_menu_profile){
+            if (mInterface != null){
+                mInterface.profileWasPressed();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,4 +162,19 @@ public class StoresListViewFragment extends ListFragment{
 
         alertDialog.show();
     }
+
+    ListView.OnItemClickListener itemWasSelected = new ListView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            for (int i = 0; i < mStores.size(); i++) {
+                Log.i("===== PRODO =====", "========== \n itemSELECTED: " + mStores.get(i).get_id() + " \n ==========");
+            }
+
+            if (mInterface != null) {
+                mInterface.storeWasSelected(mStores.get(position).get_id(), position);
+            }
+        }
+    };
 }

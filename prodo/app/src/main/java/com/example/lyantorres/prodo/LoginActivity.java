@@ -29,15 +29,21 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.login_frame, LoginFragment.newInstance(this)).commit();
-
+        Intent intent = getIntent();
         mUser = new User();
         mUser = mUser.getCurrentUser(this);
 
-        if(mUser != null){
-            Log.i("===== PRODO =====", "onCreate: " + mUser.getmEmail() + "");
-            startStoresActivity();
+        if(intent != null) {
+
+            if(intent.getAction() == "LOGOUT"){
+
+            } else if (mUser != null) {
+                Log.i("===== PRODO =====", "onCreate: " + mUser.getmEmail() + "");
+                startStoresActivity();
+            }
         }
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.login_frame, LoginFragment.newInstance(this)).commit();
     }
 
     private void startStoresActivity(){
