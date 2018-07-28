@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,11 +92,21 @@ public class DeviceSettingsFragment extends Fragment {
             WebView wv = getActivity().findViewById(R.id.webview_DS_WV);
             Button switchVideo = getActivity().findViewById(R.id.switchvideo_DS_BTN);
             Button uploadVideo = getActivity().findViewById(R.id.upload_DS_BTN);
+            Switch play = getActivity().findViewById(R.id.switchlive_DS_S);
+            TextView cp = getActivity().findViewById(R.id.current_DS_TV);
+
+            play.setEnabled(false);
 
             name.setText(mDevice.getmName());
 
-            if(mDevice.getmCurrentContent() != null){
+            if(mDevice.getmCurrentContent().getmThumbnailLink() != null && !mDevice.getmCurrentContent().getmThumbnailLink().isEmpty() ){
                 Picasso.with(mContext).load(mDevice.getmCurrentContent().getmThumbnailLink()).into(preview);
+            }
+
+            if(mDevice.getmCurrentContent().getmName()!= null && !mDevice.getmCurrentContent().getmName().isEmpty()){
+                cp.setText("Currently playing: "+ mDevice.getmCurrentContent().getmName());
+            } else {
+                cp.setText("Not playing anything");
             }
 
             switchVideo.setOnClickListener(switchVideoSelected);

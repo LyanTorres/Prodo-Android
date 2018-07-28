@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Device implements Serializable{
     private String _id;
     private String mName;
-    private ArrayList<Content> mContent;
+    private ArrayList<Content> mContent = new ArrayList<>();
     private Content mCurrentContent;
 
     public Device (JSONObject _deviceJSON){

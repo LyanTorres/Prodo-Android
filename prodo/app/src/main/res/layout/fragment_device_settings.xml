@@ -53,12 +53,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Device Settings:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_DS_TV"
         android:textColor="@android:color/white"
-        android:textSize="18dp"/>
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_DS_TV" />
 
     <Switch
         android:id="@+id/switchlive_DS_S"
@@ -95,4 +95,18 @@
         app:layout_constraintEnd_toEndOf="@+id/switchvideo_DS_BTN"
         app:layout_constraintStart_toStartOf="@+id/switchvideo_DS_BTN"
         app:layout_constraintTop_toBottomOf="@+id/switchvideo_DS_BTN" />
+
+    <TextView
+        android:id="@+id/current_DS_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        android:textColor="@color/colorLightGray"
+        app:layout_constraintEnd_toEndOf="@+id/name_DS_TV"
+        app:layout_constraintStart_toStartOf="@+id/name_DS_TV"
+        app:layout_constraintTop_toBottomOf="@+id/name_DS_TV" />
 </android.support.constraint.ConstraintLayout>

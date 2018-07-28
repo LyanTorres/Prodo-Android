@@ -14,6 +14,8 @@ import com.example.lyantorres.prodo.dataModels.Store;
 import com.example.lyantorres.prodo.dataModels.User;
 import com.example.lyantorres.prodo.fragments.mainScreens.ProfileFragment;
 import com.example.lyantorres.prodo.fragments.mainScreens.StoresListViewFragment;
+import com.example.lyantorres.prodo.fragments.onboarding.OnboardingDevices;
+import com.example.lyantorres.prodo.fragments.onboarding.OnboardingIntro;
 import com.example.lyantorres.prodo.helpers.FeedbackUtility;
 
 import org.json.JSONArray;
@@ -22,7 +24,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 public class StoresActivity extends AppCompatActivity implements StoresListViewFragment.StoreListFragmentInterface, PostDataAsyncTask.PostDataAsyncTaskInterface,
-        GetDataAsyncTask.GetAsyncTaskInterface, ProfileFragment.ProfileFragmentInterface, DeleteDataAsyncTask.DeleteAsyncTaskInterface {
+        GetDataAsyncTask.GetAsyncTaskInterface, ProfileFragment.ProfileFragmentInterface, DeleteDataAsyncTask.DeleteAsyncTaskInterface, OnboardingIntro.OnboardingIntroInterface, OnboardingDevices.OnBoardingDevicesInterface {
 
     private User mUser;
     private ArrayList<Store> mStores = new ArrayList<>();
@@ -41,14 +43,20 @@ public class StoresActivity extends AppCompatActivity implements StoresListViewF
         Intent intent = getIntent();
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, StoresListViewFragment.newInstance(this, mStores)).commit();
 
         if(intent != null && intent.hasExtra(mUser.getmPrefUserKey())){
             mUser = (User) intent.getSerializableExtra(mUser.getmPrefUserKey());
+
+            if(intent.getAction() == "REGISTERED"){
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, OnboardingIntro.newInstance()).addToBackStack("ob").commit();
+            } else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, StoresListViewFragment.newInstance(this, mStores)).commit();
+
+                String[] body = new String[] {"/stores"};
+                getStores(body);
+            }
         }
 
-        String[] body = new String[] {"/stores"};
-        getStores(body);
     }
 
     private void getStores(String[] _body){
@@ -185,4 +193,21 @@ public class StoresActivity extends AppCompatActivity implements StoresListViewF
         getStores(body);
     }
 
+
+    // ============= ONBOARDING INTERFACE METHODS =============
+
+    @Override
+    public void nextWasPressed1() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, OnboardingDevices.newInstance()).addToBackStack("ob2").commit();
+    }
+
+    @Override
+    public void skipWasPressed() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, StoresListViewFragment.newInstance(this, mStores)).commit();
+    }
+
+    @Override
+    public void finishWasPressed() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, StoresListViewFragment.newInstance(this, mStores)).commit();
+    }
 }

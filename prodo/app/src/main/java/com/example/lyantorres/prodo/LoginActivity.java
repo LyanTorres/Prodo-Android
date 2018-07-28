@@ -108,7 +108,12 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
             startStoresActivity();
         } else if (mAction == mRegisterAction){
             mUser.updateUser(_results, this);
-            startStoresActivity();
+            mUser = new User();
+            Intent intent = new Intent(this, StoresActivity.class);
+            intent.putExtra(mUser.getmPrefUserKey(), mUser.getCurrentUser(this));
+            intent.setAction("REGISTERED");
+            startActivity(intent);
+            finish();
         } else {
             mFeedback.showToastWith(this, "An email to reset your password has been sent.", Toast.LENGTH_SHORT);
             getSupportFragmentManager().popBackStackImmediate();

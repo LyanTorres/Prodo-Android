@@ -68,6 +68,7 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String>  {
         if (mUrlConnection.getResponseCode() != 200) {
             Log.i("===== PRODO =====", " ========== \n doInBackground: ===== Failed : HTTP error code : "
                     + mUrlConnection.getResponseCode() + " \n ==========");
+            return null;
         }
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(

@@ -17,7 +17,7 @@ public class Content implements Serializable{
             this._id = _contentObj.getString("_id");
             mName = _contentObj.getString("name");
             mContentLink = _contentObj.getString("contentLink");
-            mThumbnailLink = _contentObj.getString("thumbnail");
+            mThumbnailLink = _contentObj.getString("thumbnailLink");
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -39,4 +39,15 @@ public class Content implements Serializable{
         return mThumbnailLink;
     }
 
+    public void setmThumbnailLink(String mThumbnailLink) {
+        this.mThumbnailLink = mThumbnailLink;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
+    public void setmContentLink(String mContentLink) {
+        this.mContentLink = mContentLink;
+    }
 }

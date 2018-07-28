@@ -53,7 +53,7 @@ public class DevicesAdapter extends BaseAdapter {
 
         name.setText(device.getmName());
 
-        if(device.getmCurrentContent() != null) {
+        if(device.getmCurrentContent().getmThumbnailLink() != null && !device.getmCurrentContent().getmThumbnailLink().isEmpty()) {
             Picasso.with(mContext).load(device.getmCurrentContent().getmThumbnailLink()).into(preview);
         }
 

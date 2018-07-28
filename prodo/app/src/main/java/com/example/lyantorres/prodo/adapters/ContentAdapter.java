@@ -43,7 +43,7 @@ public class ContentAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.store_cell_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.content_grid_item, parent, false);
         }
 
         Content content = mContent.get(position);
@@ -51,8 +51,13 @@ public class ContentAdapter extends BaseAdapter {
         ImageView preview = convertView.findViewById(R.id.contentPreview_C_IV);
         TextView name = convertView.findViewById(R.id.contentName_S_TV);
 
-        name.setText(content.getmName());
-        Picasso.with(mContext).load(content.getmThumbnailLink()).into(preview);
+        if(content.getmName() != null) {
+            name.setText(content.getmName());
+        }
+
+        if(content.getmThumbnailLink() != null && !content.getmThumbnailLink().isEmpty()) {
+            Picasso.with(mContext).load(content.getmThumbnailLink()).into(preview);
+        }
 
         return convertView;
     }

@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "1029197055336",
+    "firebase_url": "https://prodo-d65fb.firebaseio.com",
+    "project_id": "prodo-d65fb",
+    "storage_bucket": "prodo-d65fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029197055336:android:a1b9de740f7afdd4",
+        "android_client_info": {
+          "package_name": "com.example.lyantorres.prodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1029197055336-tjv783s2sitoakih2m0mfvbdgupjft9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lyantorres.prodo",
+            "certificate_hash": "9a06871d85d3dcc1cc35fcd4580102083de6ba06"
+          }
+        },
+        {
+          "client_id": "1029197055336-6u4egld0jip5lg7cdjfp4m4j115tthsp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMj-X5R94iC2k1kC6PlCn_riRbrBWG-5c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1029197055336-6u4egld0jip5lg7cdjfp4m4j115tthsp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1029197055336-trbp43b66oqnjmgicoo73pqihhfdue3g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Prodo.Prodo-iOS"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
